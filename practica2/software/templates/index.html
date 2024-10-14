@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal - Cursos</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0; /* Remover el padding del body */
+            display: flex; /* Usar flexbox para el layout */
+            flex-direction: column; /* Colocar elementos en columna */
+            min-height: 100vh; /* Asegura que el body ocupe toda la altura de la ventana */
+        }
+        h1 {
+            text-align: center;
+            color: #4a4a4a;
+            margin: 40px 0; /* Margen superior e inferior */
+            font-size: 2.5em;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0 auto; /* Centrar el contenedor */
+            max-width: 1200px; /* Ancho máximo del contenedor */
+            flex-grow: 1; /* Permite que el contenedor principal crezca para llenar el espacio */
+        }
+        .card {
+            background: #fff;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        .curso {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #666; /* Color del texto de los cursos */
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px 0;
+            background-color: #343a40;
+            color: white;
+           
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .curso-imagen {
+    width: 300px; 
+    height: 200px; 
+    object-fit: cover; 
+    display: block; 
+    margin: 0 auto; 
+}
+
+    </style>
+</head>
+<body>
+    {% include 'software/header.html' %} 
+
+    <h1>TODOS LOS CURSOS</h1>
+    <div class="container">
+        {% for curso in cursos %}
+            <div class="card">
+                <a href="{% url 'software:curso_detalle' curso_id=curso.id %}" style="text-decoration: none;">  
+                    <p class="curso">Duración: {{ curso.duracion }}</p>
+                    <p class="curso">Créditos: {{ curso.creditos }}</p>
+                    
+
+                    {% if curso.imagen %}
+                        <img src="{{ curso.imagen.url }}" alt="{{ curso.nombre }}" class="curso-imagen"/> 
+                    {% endif %}
+                </a>
+            </div>
+        {% empty %}
+            <p>No hay cursos disponibles.</p>
+        {% endfor %}
+    </div>
+
+    {% include 'software/footer.html' %} 
+</body>
+
+</html>

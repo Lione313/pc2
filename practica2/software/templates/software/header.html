@@ -1,0 +1,73 @@
+<style>
+    /* Aquí va tu CSS */
+    .navbar {
+        display: flex;
+        justify-content: space-between; /* Distribuir elementos en el navbar */
+        align-items: center; /* Centra verticalmente los elementos del navbar */
+        background-color: #343a40; /* Color de fondo del navbar */
+        padding: 15px 30px; /* Espaciado */
+        margin-bottom: 30px; /* Espacio debajo del navbar */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra del navbar */
+    }
+    .navbar-title {
+        color: white; /* Color del texto */
+        font-size: 1.2em; /* Tamaño de fuente */
+        font-weight: bold; /* Negrita */
+    }
+    .navbar-menu {
+        list-style: none; /* Elimina los puntos de la lista */
+        display: flex; /* Disposición en línea */
+        margin: 0; /* Sin márgenes */
+        padding: 0; /* Sin padding */
+    }
+    .navbar-item {
+        margin-left: 20px; /* Espacio entre enlaces */
+    }
+    .navbar-item a {
+        color: rgb(238, 231, 231); /* Color de texto por defecto */
+        font-size: 1em; /* Tamaño de fuente */
+        padding: 8px 12px; /* Espaciado interno */
+        text-decoration: none; /* Sin subrayado */
+        transition: background-color 0.3s, color 0.3s; /* Transiciones suaves */
+    }
+    .navbar-item a.active {
+        background-color: blue; /* Color de fondo azul para el ciclo activo */
+        color: white; /* Color del texto al estar activo */
+    }
+    .navbar-item a:hover {
+        background-color: rgb(24, 22, 22); /* Color de fondo oscuro al pasar el mouse */
+        color: #d3d8dd; /* Cambia el color del texto al pasar el mouse */
+    }
+    .no-cycles {
+        color: white; /* Color del texto */
+    }
+    .navbar-item a.active {
+    background-color: blue; /* Color de fondo azul para el ciclo activo */
+    color: white; /* Color del texto al estar activo */
+}
+</style>
+
+<nav class="navbar">
+    <div class="navbar-title">Diseño y Desarrollo de Software</div>
+    <div>
+        <ul class="navbar-menu">
+            {% for semestre in semestres %}
+                <li class="navbar-item">
+                    <a href="{% url 'software:cursos_por_semestre' semestre_id=semestre.id %}" 
+                       class="{% if semestre.id == semestre_id %}active{% endif %}">
+                        {{ semestre.titulo }}
+                    </a>
+                </li>
+                
+            {% empty %}
+                <li class="navbar-item"><span class="no-cycles">No hay ciclos disponibles.</span></li>
+                
+            {% endfor %}
+
+            <li class="navbar-item">  <a class="back-link" href="{% url 'software:index' %}">Inicio</a>
+            </li>
+        </ul>
+        
+        
+    </div>
+</nav>

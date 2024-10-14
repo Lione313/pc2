@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos - {{ semestre.titulo }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #eeeeea;
+        }
+
+        .wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-top:-110px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .container {
+            height: 400px;
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            position: relative;
+        }
+
+        .card {
+            width: 80px;
+            height: 100%;
+            border-radius: 2rem;
+            cursor: pointer;
+            overflow: hidden;
+            margin: 0 10px;
+            display: flex;
+            align-items: flex-end;
+            transition: all 0.5s ease;
+            box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.8);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .card.expanded {
+            width: 600px;
+            height: 100%;
+        }
+
+        .description {
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .card.expanded .description {
+            display: flex;
+        }
+
+        {% for curso in cursos %}
+            .card[for="c{{ forloop.counter }}"] {
+                background-image: url("{{ curso.imagen.url|default:'https://via.placeholder.com/80' }}");
+            }
+        {% endfor %}
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px 0;
+            background-color: #343a40;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'software/header.html' %}
+
+    <div class="wrapper">
+        <h1>Cursos del Semestre: {{ semestre.titulo }}</h1>
+        <p>Duración: {{ semestre.duracion }}</p>
+        <h2>Lista de Cursos</h2>
+
+        <div class="carousel-container">
+            <div class="container" id="carousel">
+                {% for curso in cursos %}
+                    <label for="c{{ forloop.counter }}" class="card" data-index="{{ forloop.counter }}" data-curso-id="{{ curso.id }}">
+                        <div class="description">
+                            <h4>{{ curso.nombre }}</h4>
+                            <p>Duración: {{ curso.duracion }}</p>
+                            <p>Créditos: {{ curso.creditos }}</p>
+                            <a href="{% url 'software:curso_detalle' curso.id %}" class="btn-detalle" style="
+                                display: block;
+                                margin-top: 15px;
+                                text-align: center;
+                                background-color: #111213;
+                                color: white;
+                                padding: 10px 20px;
+                                border-radius: 5px;
+                                text-decoration: none;
+                            ">Ver Detalle del Curso</a>
+                            {% if curso.descripcion %}
+                                <p>{{ curso.descripcion|truncatewords:20 }}</p>
+                            {% endif %}
+                        </div>
+                    </label>
+                {% empty %}
+                    <p>No hay cursos disponibles para este semestre.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% include 'software/footer.html' %}
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                
+                cards.forEach(c => c.classList.remove('expanded'));
+
+               
+                card.classList.add('expanded');
+
+          
+                const cursoId = card.getAttribute('data-curso-id');
+
+                const detalleBtn = card.querySelector('.btn-detalle');
+                detalleBtn.href = `/curso/${cursoId}/`; 
+            });
+
+           
+            document.addEventListener('click', (e) => {
+                if (!card.contains(e.target)) {
+                    card.classList.remove('expanded');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

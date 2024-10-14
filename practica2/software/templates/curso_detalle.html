@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Curso - {{ curso.nombre }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-grow: 1; 
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .curso-imagen {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            font-weight: bold;
+            color: #007BFF;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px 0;
+            background-color: #343a40;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    {% include 'software/header.html' %} 
+
+    <div class="container">
+        <h1>{{ curso.nombre }}</h1>
+        
+        {% if curso.imagen %}
+            <img src="{{ curso.imagen.url }}" alt="Imagen de {{ curso.nombre }}" class="curso-imagen">
+        {% else %}
+            <p>No hay imagen disponible para este curso.</p>
+        {% endif %}
+
+        <p><strong>Duración:</strong> {{ curso.duracion }}</p>
+        <p><strong>Créditos:</strong> {{ curso.creditos }}</p>
+        <p><strong>Descripción:</strong> {{ curso.descripcion }}</p>
+        
+        <a class="back-link" href="{% url 'software:cursos_por_semestre' semestre_id=semestre_id %}">Volver a Cursos por Semestre</a>
+    </div>
+
+    {% include 'software/footer.html' %}  
+</body>
+</html>
